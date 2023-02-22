@@ -1,10 +1,11 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Created by CihatKsm with www.koeri.boun.edu.tr",
   "main": "earthquake.js",
   "scripts": {
-    "test": "node simple.js"
+    "test": "node simple.js",
+    "publish": "npm publish"
   },
   "author": "CihatKsm <me@cihatksm.com>",
   "license": "ISC",
