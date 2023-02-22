@@ -1,6 +1,6 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Created by CihatKsm with www.koeri.boun.edu.tr",
   "main": "earthquake.js",
   "scripts": {
