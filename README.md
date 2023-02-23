@@ -1,4 +1,5 @@
-#### Bu modül KANDİLLİ RASATHANESİ VE DEPREM ARAŞTIRMA ENSTİTÜSÜ (KRDAE) BÖLGESEL DEPREM-TSUNAMİ İZLEME VE DEĞERLENDİRME MERKEZİ (BDTİM) tarafından sunulan bilgileri içermektedir. Herhangi bir sorun teşkil ediyorsa, problem oluşturuyorsa ya da oluşturduysa önce tarafıma bilgi verilmesi rica olunur.
+#### Kandi̇lli̇ Rasathanesi̇ Ve Deprem Araştirma Ensti̇tüsü, Bölgesel Deprem-tsunami̇ İzleme Ve Değerlendi̇rme Merkezi̇ tarafından sunulan bilgileri içermektedir. 
+### Herhangi bir sorun teşkil ediyorsa, problem oluşturuyorsa ya da oluşturduysa önce tarafıma bilgi verilmesi rica olunur.
 
 ## Modül İndirme:
 
@@ -24,7 +25,9 @@ quake.earthquake.on('quake', (info) => {
           md: '1.2',
           ml: '1.2', -> The measurement is usually performed.
           mw: '1.2',
-          place: '< LOCATION INFORMATION >'
+          place: '< LOCATION INFORMATION >',
+          image: '< IMAGE URL >',
+          location: '< LOCATION URL >',
       }
     */
 })

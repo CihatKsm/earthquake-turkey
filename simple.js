@@ -13,4 +13,4 @@ setTimeout(async () => {
 
     const min3_8 = await quake.earthquakes.get({ minimum: 3.8, count: 2 })
     //console.log('the latest earthquake of 3.8 and above:', min3_8)
-}, 2000);
+}, 1000);
