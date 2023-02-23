@@ -1,9 +1,6 @@
 const quake = require('./earthquake')
+const date = () => new Date()
 
-function date() {
-    let now = new Date()
-    return now;
-}
 console.log(date(), 'System opened!')
 
 quake.earthquake.on('quake', (info) => {

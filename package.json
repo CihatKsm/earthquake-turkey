@@ -1,11 +1,10 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.0.5",
-  "description": "Created by CihatKsm with www.koeri.boun.edu.tr",
+  "version": "0.0.8",
+  "description": "This module has been made to receive notification of earthquakes in Turkey or to list past earthquakes.",
   "main": "earthquake.js",
   "scripts": {
-    "test": "node simple.js",
-    "publish": "npm publish"
+    "test": "node simple.js"
   },
   "author": "CihatKsm <me@cihatksm.com>",
   "license": "ISC",
@@ -16,5 +15,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CihatKsm/earthquake-turkey.git"
-  }
+  },
+  "keywords": [
+    "cihatksm", "earthquake", "turkey", "earthquake-turkey"
+  ]
 }

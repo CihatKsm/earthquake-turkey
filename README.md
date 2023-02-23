@@ -15,6 +15,18 @@ console.log(date(), 'System opened!')
 
 quake.earthquake.on('quake', (info) => {
     console.log(date(), info)
+    /*
+      {
+          date: '2023.01.01 12:34:56',
+          latitude: '12.3456',
+          longitude: ' 78,9123',
+          depth: '1.2',
+          md: '1.2',
+          ml: '1.2', -> The measurement is usually performed.
+          mw: '1.2',
+          place: '< LOCATION INFORMATİON >'
+      }
+    */
 })
 
 setTimeout(async () => {

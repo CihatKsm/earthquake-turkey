@@ -6,8 +6,8 @@ module.exports = async () => {
     const api = await axios({ method: 'get', url }).catch((e) => null)
     if (!api) return latestData;
 
-    const datas = api.data.slice(api.data.indexOf('<pre>')).split("\n").slice(7).slice(0, 500);
-    const array = latestData = datas.map(m => m.replace(`\r`, '')).map(data => {
+    const datas = api.data.match(/<pre>([\s\S]*)<\/pre>/)[1].split("\n").slice(7).slice(0, 500);
+    const array = datas.map(m => m.replace(`\r`, '')).map(data => {
         const i = data.split("  ").filter(f => f !== '')
         return {
             date: i[0],
