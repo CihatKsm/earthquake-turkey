@@ -33,7 +33,7 @@ async function item(item, latitude, longitude) {
     const _Finded = (itemprop) => api.data.split('<meta').filter(f => f.includes(`itemprop="${itemprop}"`))[0].replace(` content="`, '')
     const Finded = (itemprop) => _Finded(itemprop).slice(0, _Finded(itemprop).indexOf(`"`))
     if (item == 'image') {
-        if (Finded(item).includes('RQWSxpNUsD55LLuN1lO-mq0Vl74')) return 'https://maps.gstatic.com/tactile/pane/default_geocode-2x.png'
+        if (Finded(item).startsWith('https://maps.google.com/')) return 'https://maps.gstatic.com/tactile/pane/default_geocode-2x.png'
         else if (Finded(item).includes('w256-h256')) return Finded(item).replace('w256-h256', 'w4096-h4096')
     }
     return Finded(item)
