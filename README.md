@@ -24,7 +24,7 @@ quake.earthquake.on('quake', (info) => {
           md: '1.2',
           ml: '1.2', -> The measurement is usually performed.
           mw: '1.2',
-          place: '< LOCATION INFORMATİON >'
+          place: '< LOCATION INFORMATION >'
       }
     */
 })
