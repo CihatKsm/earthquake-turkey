@@ -53,6 +53,6 @@ async function checkUpdate() {
     const api = await axios({ method: 'get', url }).catch((e) => null)
     const latest = api.request.path.split('/')[1].split('@')[1] || 0;
 
-    if (Number(latest.split('.').join('')) >= Number(package.version.split('.').join(''))) 
+    if (Number(latest.split('.').join('')) > Number(package.version.split('.').join(''))) 
         console.log('\x1b[32m%s\x1b[0m',`✅ Please update earthquake-turkey module ${package.version} to ${latest} version.`)
 }
