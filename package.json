@@ -1,6 +1,6 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This module has been made to receive notification of earthquakes in Turkey or to list past earthquakes.",
   "main": "earthquake.js",
   "scripts": {
@@ -17,6 +17,9 @@
     "url": "git+https://github.com/CihatKsm/earthquake-turkey.git"
   },
   "keywords": [
-    "cihatksm", "earthquake", "turkey", "earthquake-turkey"
+    "cihatksm",
+    "earthquake",
+    "turkey",
+    "earthquake-turkey"
   ]
 }
