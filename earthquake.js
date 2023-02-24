@@ -10,9 +10,12 @@ module.exports.earthquake = new EventEmitter();
 
 async function quake(timeout) {
     const datas = await api();
-    if (latestData.length == 0) latestData = datas[0].date;
-    if (latestData == datas[0]?.date) return setTimeout(async () => await quake(timeout), timeout);
-    latestData = datas[0].date
+
+    if (!datas || !datas[0]) return setTimeout(async () => await quake(20), timeout);
+    if (latestData.length == 0) latestData = datas[0]?.date;
+    if (latestData == datas[0]?.date) return setTimeout(async () => await quake(20), timeout);
+
+    latestData = datas[0]?.date
     module.exports.earthquake.emit('quake', datas[0])
     setTimeout(async () => await quake(timeout), timeout);
 }
