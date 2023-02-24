@@ -18,16 +18,14 @@ quake.earthquake.on('quake', (info) => {
     console.log(date(), info)
     /*
       {
-          date: '2023.01.01 12:34:56',
+          date: '1234567891234',
           latitude: '12.3456',
-          longitude: ' 78,9123',
+          longitude: '78,9123',
           depth: '1.2',
-          md: '1.2',
-          ml: '1.2', -> The measurement is usually performed.
-          mw: '1.2',
+          ml: '3.4',
           place: '< LOCATION INFORMATION >',
-          image: '< IMAGE URL >',
-          location: '< LOCATION URL >',
+          image: 'cihatksm.com/images/icon.png',
+          location: 'maps.google.com/türkiye',
       }
     */
 })
@@ -36,7 +34,7 @@ setTimeout(async () => {
     const all = await quake.earthquakes({ count: 1 })
     console.log('this is latest quake:', all[0])
 
-    const min3_8 = await quake.earthquakes.get({ minimum: 3.8, count: 2 })
+    const min3_8 = await quake.earthquakes.get({ minimum: 3.8, count: 3 })
     console.log('the latest earthquake of 3.8 and above:', min3_8)
 }, 2000);
 ```
