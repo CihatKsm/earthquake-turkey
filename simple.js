@@ -4,7 +4,7 @@ const date = () => new Date()
 console.log(date(), 'System opened!')
 
 quake.earthquake.on('quake', (info) => {
-    console.log(date(), info)
+    //console.log(date(), info)
 })
 
 setTimeout(async () => {

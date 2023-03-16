@@ -1,7 +1,24 @@
+const MongoUrl = 'mongodb+srv://earthquake:turkey@earthquake.pnlqnmv.mongodb.net/earthquake'
 const { default: axios } = require('axios');
 const EventEmitter = require('events');
-const api = require('./api');
+const mongoose = require('mongoose');
+
+const earthquakes = mongoose.model("earthquakes", mongoose.Schema({
+    date: Date,
+    latitude: String,
+    longitude: String,
+    ml: String,
+    depth: String,
+    place: String,
+    image: String,
+    location: String
+}))
+
 let latestData = '';
+
+mongoose.set('strictQuery', true)
+mongoose.connect(MongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+    .catch(() => console.error)
 
 /**
  * This listener allows you to receive notifications by typing the necessary codes into it when there is any earthquake.
@@ -9,24 +26,28 @@ let latestData = '';
 module.exports.earthquake = new EventEmitter();
 
 async function quake(timeout) {
-    const datas = await api();
+    const _datas = await earthquakes.find().catch((e) => { return [] })
+    const datas = _datas?.sort((a, b) => b.date - a.date)
+    if (!datas || !datas[0]) return setTimeout(async () => await quake(15), timeout * 1000);
+    if (latestData.length == 0) latestData = `${Number(datas[0]?.date)}`;
+    if (latestData == `${Number(datas[0]?.date)}`) return setTimeout(async () => await quake(15), timeout * 1000);
 
-    if (!datas || !datas[0]) return setTimeout(async () => await quake(20), timeout);
-    if (latestData.length == 0) latestData = datas[0]?.date;
-    if (latestData == datas[0]?.date) return setTimeout(async () => await quake(20), timeout);
-
-    latestData = datas[0]?.date
-    module.exports.earthquake.emit('quake', datas[0])
-    setTimeout(async () => await quake(timeout), timeout);
+    latestData = `${Number(datas[0]?.date)}`
+    module.exports.earthquake.emit('quake', datas[0]);
+    setTimeout(async () => await quake(timeout), timeout * 1000);
 }
 
-setTimeout(async () => await quake(15), 1000);
+setTimeout(async () => await quake(10), 1000);
 setTimeout(async () => await checkUpdate(), 1000);
+
 /**
  * 
  * @returns Shows the information of the last 25 earthquakes that have occurred
  */
-module.exports.earthquakes = async () => await api()
+module.exports.earthquakes = async () => {
+    const _datas = await earthquakes.find().catch((e) => { return [] });
+    return _datas?.sort((a, b) => b.date - a.date) || [];
+}
 
 /**
  * 
@@ -38,13 +59,13 @@ module.exports.earthquakes.get = async ({ minimum, count }) => {
     if (!minimum) return [];
     if (isNaN(Number(minimum))) return [];
 
-    const all = await api()
-    const datas = all.filter(f => Number(f.ml) >= Number(minimum))
+    const _datas = await earthquakes.find().catch((e) => { return [] })
+    const datas = _datas?.sort((a, b) => b.date - a.date)?.filter(f => Number(f.ml) >= Number(minimum));
 
     if (datas.length == 0) return [];
     if (count) {
         if (isNaN(Number(count))) return [];
-        return datas.slice(0, count)
+        return datas.slice(0, count);
     }
 
     return datas;
