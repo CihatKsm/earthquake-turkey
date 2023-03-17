@@ -31,9 +31,10 @@ module.exports = async ({ all }) => {
     const _earthquakes = all ? __earthquakes?.slice(0, 200) : __earthquakes?.slice(0, 50)
     const earthquakes = await Promise.all(_earthquakes.map(async (text) => {
         let datas = text.split(' ').filter(f => f !== '').slice(0, 8);
-        let place = await item('description', datas[2], datas[3])
+        let place = await item('description', datas[2], datas[3]);
+        let location = 'https://www.google.com/maps/place/' + datas[2] + ',' + datas[3];
         if (place?.includes('Sea')) {
-            const api = await axios({ method: 'get', url: data.location }).catch((e) => null)
+            const api = await axios({ method: 'get', url: location }).catch((e) => null)
             const x = 'window.APP_INITIALIZATION_STATE=', y = 'window.APP_FLAGS='
 
             const apiData = api?.data?.slice(api.data.indexOf(x) + x.length, api.data.indexOf(y)).split('[')
@@ -61,7 +62,7 @@ module.exports = async ({ all }) => {
             ml: [datas[5], datas[6], datas[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0],
             place,
             image: await item('image', datas[2], datas[3]),
-            location: 'https://www.google.com/maps/place/' + datas[2] + ',' + datas[3]
+            location
         }
     }))
     
