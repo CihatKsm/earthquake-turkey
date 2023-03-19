@@ -12,8 +12,7 @@ const places = [
 ]
 
 module.exports = async ({ all }) => {
-    const item = async (item, latitude, longitude) => {
-        const api = await axios({ method: 'get', url: 'https://www.google.com/maps/place/' + latitude + ',' + longitude }).catch((e) => null)
+    const item = async (api, item) => {
         if (!api || !api?.data) return null;
         const _Finded = (itemprop) => api?.data?.split('<meta')?.filter(f => f?.includes(`itemprop="${itemprop}"`))[0]?.replace(` content="`, '')
         const Finded = (itemprop) => _Finded(itemprop)?.slice(0, _Finded(itemprop)?.indexOf(`"`))
@@ -26,18 +25,21 @@ module.exports = async ({ all }) => {
 
     const url = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp'
     const api = await axios({ method: 'get', url }).catch((e) => null)
+
     if (!api || !api.data) return [];
     const __earthquakes = api?.data?.slice(api?.data?.indexOf('<pre>') + 5, api?.data?.indexOf('</pre>'))?.split('\r\n')?.slice(7)
-    const _earthquakes = all ? __earthquakes?.slice(0, 200) : __earthquakes?.slice(0, 50)
+    const _earthquakes = all ? __earthquakes?.slice(0, 100) : __earthquakes?.slice(0, 20)
     const earthquakes = await Promise.all(_earthquakes.map(async (text) => {
         let datas = text.split(' ').filter(f => f !== '').slice(0, 8);
-        let place = await item('description', datas[2], datas[3]);
-        let location = 'https://www.google.com/maps/place/' + datas[2] + ',' + datas[3];
-        if (place?.includes('Sea')) {
-            const api = await axios({ method: 'get', url: location }).catch((e) => null)
-            const x = 'window.APP_INITIALIZATION_STATE=', y = 'window.APP_FLAGS='
 
-            const apiData = api?.data?.slice(api.data.indexOf(x) + x.length, api.data.indexOf(y)).split('[')
+        let location = 'https://www.google.com/maps/place/' + datas[2] + ',' + datas[3]
+        const googleApi = await axios({ method: 'get', url: location }).catch((e) => null)
+
+        let place = await item(googleApi, 'description');
+
+        if (place?.includes('Sea')) {
+            const x = 'window.APP_INITIALIZATION_STATE=', y = 'window.APP_FLAGS='
+            const apiData = googleApi?.data?.slice(googleApi.data.indexOf(x) + x.length, googleApi.data.indexOf(y)).split('[')
             if (apiData?.length) {
                 for (let index = 0; index < apiData.length; index++) {
                     const e = apiData[index];
@@ -61,7 +63,7 @@ module.exports = async ({ all }) => {
             depth: datas[4],
             ml: [datas[5], datas[6], datas[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0],
             place,
-            image: await item('image', datas[2], datas[3]),
+            image: await item(googleApi, 'image'),
             location
         }
     }))

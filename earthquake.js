@@ -31,7 +31,7 @@ setTimeout(async () => await checkUpdate(), 1000);
 
 /**
  * 
- * @returns Shows the information of the last ~500 earthquakes that have occurred.
+ * @returns Shows the information of the last ~100 (max) earthquakes that have occurred.
  */
 module.exports.earthquakes = async ({ count }) => {
     let datas = await api({ all: true });
