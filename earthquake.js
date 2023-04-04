@@ -12,12 +12,8 @@ async function quake(timeout) {
     const datas = await api({ all: false })
 
     if (!datas || !datas[0]) return refresh(30)
-    if (latestData.length == 0) {
-        latestData = datas.map(m => m.date);
-        return refresh(30);
-    }
-    if (latestData.includes(datas[0]?.date)) 
-        return refresh(30);
+    if (latestData.length == 0) latestData = datas.map(m => m.date);
+    if (latestData.includes(datas[0]?.date)) return refresh(30);
 
     latestData = [datas[0]?.date, ...latestData];
 
@@ -26,8 +22,7 @@ async function quake(timeout) {
     setTimeout(async () => await quake(timeout), timeout * 1000);
 }
 
-setTimeout(async () => await quake(20), 1000);
-setTimeout(async () => await checkUpdate(), 1000);
+setTimeout(async () => await quake(30), 1000);
 
 /**
  * 
@@ -53,20 +48,7 @@ module.exports.earthquakes.get = async ({ minimum, count }) => {
     const datas = _datas.filter(f => Number(f.ml) >= Number(minimum));
 
     if (datas.length == 0) return [];
-    if (count) {
-        if (isNaN(Number(count))) return [];
-        return datas.slice(0, count);
-    }
-
-    return datas;
-}
-
-async function checkUpdate() {
-    const package = require('./package.json');
-    const url = 'https://unpkg.com/earthquake-turkey@latest';
-    const api = await axios({ method: 'get', url }).catch((e) => null);
-    const latest = api.request.path.split('/')[1].split('@')[1] || 0;
-
-    if (Number(latest.split('.').join('')) > Number(package.version.split('.').join(''))) 
-        console.log('\x1b[32m%s\x1b[0m',`✅ Please update earthquake-turkey module ${package.version} to ${latest} version.`)
+    if (!count) return datas;
+    if (isNaN(Number(count))) return [];
+    return datas.slice(0, count);
 }
