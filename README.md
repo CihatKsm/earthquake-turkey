@@ -55,10 +55,3 @@ setTimeout(async () => {
 <small>
 Herhangi bir sorun teşkil ediyorsa, problem oluşturuyorsa ya da oluşturduysa önce tarafıma bilgi verilmesi rica olunur.
 </small>
-
-<style>
-  * {
-    font-family: monospace;
-    font-weight: 600;
-  }
-</style>
