@@ -1,28 +1,36 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "This module has been made to receive notification of earthquakes in Turkey or to list past earthquakes.",
   "main": "earthquake.js",
   "scripts": {
     "dev": "nodemon simple.js"
   },
   "author": "CihatKsm <me@cihatksm.com>",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CihatKsm/earthquake-turkey.git"
   },
   "keywords": [
     "cihatksm",
+    "quake",
+    "quakes",
     "earthquake",
+    "earthquakes",
     "turkey",
-    "earthquake-turkey"
+    "earthquake-turkey",
+    "deprem",
+    "depremler",
+    "türkiye",
+    "deprem-türkiye"
   ],
   "dependencies": {
-    "axios": "^1.3.4",
+    "axios": "^1.3.5",
+    "cheerio": "^1.0.0-rc.12",
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.22"
   }
 }
