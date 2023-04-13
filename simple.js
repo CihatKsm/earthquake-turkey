@@ -7,7 +7,8 @@ quake.earthquake.on('quake', (info) => {
     console.log(date(), info)
 })
 
-setTimeout(async () => {
-    const all = await quake.earthquakes({ count: 3 })
-    //console.log(all)
-}, 1000);
+quake.earthquakes({ minimum: 3, count: 3 }).then(all => {
+    console.log(date(), 'here are the past 3 earthquakes:', all)
+}).catch(err => {
+    console.log(date(), 'error:', err)
+})

@@ -1,9 +1,10 @@
 {
   "name": "earthquake-turkey",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "This module has been made to receive notification of earthquakes in Turkey or to list past earthquakes.",
   "main": "earthquake.js",
   "scripts": {
+    "start": "node simple.js",
     "dev": "nodemon simple.js"
   },
   "author": "CihatKsm <me@cihatksm.com>",
