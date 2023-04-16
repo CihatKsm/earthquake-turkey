@@ -28,7 +28,7 @@ async function quake(timeout) {
 
     module.exports.earthquake.emit('quake', datas[0]);
     latestData = [];
-    setTimeout(async () => await quake(timeout), timeout * 1000);
+    return refresh(30);
 }
 
 setTimeout(async () => await quake(30), 1000);

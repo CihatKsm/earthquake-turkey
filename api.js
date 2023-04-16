@@ -4,7 +4,8 @@ const cheerio = require('cheerio');
 async function getPlace(lat, long) {
     const location = 'https://www.google.com.tr/maps/place/' + lat + ',' + long;
     const googleApi = await axios({ method: 'get', url: location }).catch((e) => null);
-    const $ = cheerio.load(googleApi.data);
+    const $ = cheerio.load(googleApi?.data) || null;
+    if (!googleApi?.data || !$) return { coordinate: null, place: null, image: null, location };
     let place, image, coordinate;
     $('meta').filter((i, e) => $(e)?.attr('itemprop')).each((i, e) => {
         const isNotImage = $(e).attr('content').startsWith('https://maps.google.com/');
@@ -17,9 +18,8 @@ async function getPlace(lat, long) {
 }
 
 async function getEarthquakes(datas) {
-    const minimum = datas?.minimum || 0,
-        count = datas?.count || 20,
-        controlled = datas?.controlled || 20;
+    const minimum = datas?.minimum || 0, count = datas?.count || 20, controlled = datas?.controlled || 20;
+    
     if (isNaN(Number(controlled))) return new Error('controlled option must be a number.');
     if (Number(controlled) > 500) return new Error('controlled option must be less than 500.');
     if (isNaN(Number(minimum))) return new Error('minimum option must be a number.');

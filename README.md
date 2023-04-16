@@ -36,7 +36,7 @@ quake.earthquake.on('quake', object => {
 | :-------- | :------- | :------------------------- |
 | `minimum` | `number` | Minimum büyüklükteki depremleri gösterir. Varsayılan: 0 ve üzeri. |
 | `count`   | `number` | Gösterilecek deprem sayısı. Varsayılan: 20 tane. |
-| `controlled` | `number` | Kontrollü depremleri gösterir. Varsayılan: 20 tane. |
+| `controlled` | `number` | Kontrol edilecek deprem sayısı. Varsayılan: 20 tane. |
 
 ```js
 const quake = require('earthquake-turkey')
