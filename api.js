@@ -2,24 +2,27 @@ const { default: axios } = require("axios");
 const cheerio = require('cheerio');
 
 async function getPlace(lat, long) {
-    const location = 'https://www.google.com.tr/maps/place/' + lat + ',' + long;
-    const googleApi = await axios({ method: 'get', url: location }).catch((e) => null);
-    const $ = cheerio.load(googleApi?.data) || null;
-    if (!googleApi?.data || !$) return { coordinate: null, place: null, image: null, location };
-    let place, image, coordinate;
-    $('meta').filter((i, e) => $(e)?.attr('itemprop')).each((i, e) => {
-        const isNotImage = $(e).attr('content').startsWith('https://maps.google.com/');
-        if ($(e).attr('itemprop') == 'name') coordinate = $(e).attr('content').split(' · ')[0];
-        if ($(e).attr('itemprop') == 'description') place = $(e).attr('content');
-        if ($(e).attr('itemprop') == 'image')
-            image = isNotImage ? 'https://maps.gstatic.com/tactile/pane/default_geocode-2x.png' : $(e).attr('content');
-    })
-    return { coordinate, place, image, location }
+    let data = { coordinate: null, place: null, image: null, location: null };
+    data.location = 'https://www.google.com.tr/maps/place/' + lat + ',' + long;
+    const googleApi = await axios({ method: 'get', url: data.location }).catch((e) => null);
+    try {
+        const $ = cheerio.load(googleApi?.data) || null;
+        if (!googleApi?.data || !$) return data;
+        $('meta').filter((i, e) => $(e)?.attr('itemprop')).each((i, e) => {
+            const isNotImage = $(e).attr('content').startsWith('https://maps.google.com/');
+            if ($(e).attr('itemprop') == 'name') data.coordinate = $(e).attr('content').split(' · ')[0];
+            if ($(e).attr('itemprop') == 'description') data.place = $(e).attr('content');
+            if ($(e).attr('itemprop') == 'image')
+                data.image = isNotImage ? 'https://maps.gstatic.com/tactile/pane/default_geocode-2x.png' : $(e).attr('content');
+        })
+    } catch (e) { }
+    return data;
 }
 
 async function getEarthquakes(datas) {
+    let earthquakes = new Array();
     const minimum = datas?.minimum || 0, count = datas?.count || 20, controlled = datas?.controlled || 20;
-    
+
     if (isNaN(Number(controlled))) return new Error('controlled option must be a number.');
     if (Number(controlled) > 500) return new Error('controlled option must be less than 500.');
     if (isNaN(Number(minimum))) return new Error('minimum option must be a number.');
@@ -28,21 +31,19 @@ async function getEarthquakes(datas) {
 
     const url = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp'
     const response = await axios({ method: 'get', url }).catch((e) => null);
-    const $ = cheerio.load(response?.data);
-    const _earthquakes = $('pre').text().split('\n').filter(f => f.includes(':')).map(m => m.split(' ').filter(f => f != '').slice(0, 8));
-    let earthquakes = [];
 
-    for (let quake of _earthquakes.slice(0, Number(controlled))) {
-        const ml = [quake[5], quake[6], quake[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0];
-        if (Number(ml) < Number(minimum)) continue;
-        const { coordinate, place, image, location } = await getPlace(quake[2], quake[3]);
-        earthquakes.push({
-            date: quake[0] + ' ' + quake[1],
-            latitude: quake[2],
-            longitude: quake[3],
-            depth: String(Number(quake[4])),
-            ml, place, coordinate, image, location
-        });
+    const ___earthquakes = response?.data?.slice(response?.data?.indexOf('<pre>') + 5, response?.data?.indexOf('</pre>'))?.split('\r\n');
+    const __earthquakes = ___earthquakes?.filter(f => f.includes(':')).map(m => m.split(' ').filter(f => f != '').slice(0, 8));
+    const _earthquakes = __earthquakes.slice(0, Number(controlled))
+        .map(m => ({
+            date: m[0] + ' ' + m[1], depth: String(Number(m[4])), latitude: m[2], longitude: m[3],
+            ml: [m[5], m[6], m[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0]
+        }));
+
+    for (let earthquake of _earthquakes.filter(f => Number(f.ml) >= Number(minimum))) {
+        const { date, latitude, longitude, depth, ml } = earthquake;
+        const { coordinate, place, image, location } = await getPlace(latitude, longitude);
+        earthquakes.push({ date, latitude, longitude, depth, ml, place, coordinate, image, location });
     }
 
     return earthquakes.slice(0, Number(count))
