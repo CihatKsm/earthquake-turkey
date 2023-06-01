@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const api = require('./api');
+const { default: axios } = require('axios');
 let latestData = []
 
 /**
@@ -31,4 +32,18 @@ async function quake(timeout) {
     return refresh(30);
 }
 
-setTimeout(async () => await quake(30), 1000);
+setTimeout(async () => {
+    await moduleVersionControl();
+    await quake(30);
+}, 1000);
+
+async function moduleVersionControl() {
+    const package = require('./package.json');
+    const requestUrl = `http://registry.npmjs.org/${package.name}`;
+    const { data } = await axios.get(requestUrl).catch((e) => ({ data: null }));
+    const latest = data['dist-tags'].latest;
+    if (package.version !== latest) {
+        console.log(new Date(), `(${package.name}) New version available! (${latest})`);
+        console.log(new Date(), `(${package.name}) Please update your package with "npm i ${package.name}@latest"`);
+    }
+}

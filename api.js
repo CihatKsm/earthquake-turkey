@@ -19,7 +19,7 @@ async function getPlace(lat, long) {
     return data;
 }
 
-async function getEarthquakes(datas) {
+module.exports = async (datas) => {
     let earthquakes = new Array();
     const minimum = datas?.minimum || 0, count = datas?.count || 20, controlled = datas?.controlled || 20;
 
@@ -51,5 +51,3 @@ async function getEarthquakes(datas) {
 
     return earthquakes.slice(0, Number(count))
 }
-
-module.exports = getEarthquakes;
