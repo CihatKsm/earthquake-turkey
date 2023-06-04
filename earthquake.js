@@ -20,23 +20,17 @@ module.exports.earthquake = new EventEmitter();
 async function quake(timeout) {
     const refresh = async (x) => setTimeout(async () => await quake(x), timeout * 1000);
     const datas = await api()
-
-    if (!datas || !datas[0]) return refresh(5)
+    if (!datas || !datas[0]) return refresh(15)
     if (latestDatas.length == 0) latestDatas = datas;
-
-    if (compareObjects(latestDatas[0], datas[0])) return refresh(5);
-
-    console.log(latestDatas.length)
+    if (compareObjects(latestDatas[0], datas[0])) return refresh(15);
     latestDatas = [datas[0], ...latestDatas.slice(0, 19)];
-    console.log(latestDatas.length)
-
     module.exports.earthquake.emit('quake', datas[0]);
-    return refresh(5);
+    return refresh(15);
 }
 
 setTimeout(async () => {
     await moduleVersionControl();
-    await quake(0);
+    await quake(10);
 }, 1000);
 
 async function moduleVersionControl() {
@@ -50,7 +44,6 @@ async function moduleVersionControl() {
     }
 }
 
-//obje benzerlik testi kodu
 function compareObjects(objectX, objectY) {
     const datasX = Object.keys(objectX), datasY = Object.keys(objectY);
     if (datasX.length !== datasY.length) return false;

@@ -6,12 +6,12 @@
 
 #### Bildirim Almak İçin Örnek Kullanım:
 ```js
-const quake = require('earthquake-turkey')
+const { earthquake } = require('earthquake-turkey')
 const date = () => new Date()
 
 console.log(date(), 'System opened!')
 
-quake.earthquake.on('quake', object => {
+earthquake.on('quake', object => {
     console.log(date(), 'Yeni bir deprem oldu!', object)
 })
 ```
@@ -39,15 +39,14 @@ quake.earthquake.on('quake', object => {
 | `controlled` | `number` | Kontrol edilecek deprem sayısı. Varsayılan: 20 tane. |
 
 ```js
-const quake = require('earthquake-turkey')
+const { earthquakes } = require('earthquake-turkey')
 const date = () => new Date()
 
 console.log(date(), 'System opened!')
 
-setTimeout(async () => {
-    const all = await quake.earthquakes({ count: 3 })
-    console.log('here are the past 3 earthquakes:', all)
-}, 2000);
+earthquakes({ count: 3 }).then(datas => {
+    console.log(date(), 'here are the past 3 earthquakes:', datas)
+})
 ```
 
 #### Örnek Çıktı:

@@ -32,21 +32,22 @@ module.exports = async (datas) => {
     const url = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp'
     const response = await axios({ method: 'get', url }).catch((e) => null);
 
-    const ___earthquakes = response?.data?.slice(response?.data?.indexOf('<pre>') + 5, response?.data?.indexOf('</pre>'))?.split('\r\n') || [];
-    const __earthquakes = ___earthquakes?.filter(f => f.includes(':')).map(m => m.split(' ').filter(f => f != '').slice(0, 8)) || [];
+    const earthquakesX = response?.data?.slice(response?.data?.indexOf('<pre>') + 5, response?.data?.indexOf('</pre>'))?.split('\r\n') || [];
+    const earthquakesY = earthquakesX?.filter(f => f.includes(':')).map(m => m.split(' ').filter(f => f != '').slice(0, 8)) || [];
     
-    if (__earthquakes.length == 0) return [];
+    if (earthquakesY.length == 0) return [];
     
-    const _earthquakes = __earthquakes.slice(0, Number(controlled))
+    const earthquakesZ = earthquakesY.slice(0, Number(controlled))
         .map(m => ({
             date: m[0] + ' ' + m[1], depth: String(Number(m[4])), latitude: m[2], longitude: m[3],
             ml: [m[5], m[6], m[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0]
         }));
 
-    for (let earthquake of _earthquakes.filter(f => Number(f.ml) >= Number(minimum))) {
+    for (let earthquake of earthquakesZ.filter(f => Number(f.ml) >= Number(minimum))) {
         const { date, latitude, longitude, depth, ml } = earthquake;
+        const fixedDate = new Date(date.replaceAll('.', '-')).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' });
         const { coordinate, place, image, location } = await getPlace(latitude, longitude);
-        earthquakes.push({ date, latitude, longitude, depth, ml, place, coordinate, image, location });
+        earthquakes.push({ date: fixedDate, latitude, longitude, depth, ml, place, coordinate, image, location });
     }
 
     return earthquakes.slice(0, Number(count))
