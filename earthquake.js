@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const api = require('./api');
 const { default: axios } = require('axios');
-let latestDatas = []
+let latestDatas = [];
 
 /**
  * This function allows you to get the latest earthquakes.
@@ -19,8 +19,8 @@ module.exports.earthquakes = async (data) => await api(data);
 module.exports.earthquake = new EventEmitter();
 async function quake(timeout) {
     const refresh = async (x) => setTimeout(async () => await quake(x), timeout * 1000);
-    const datas = await api()
-    if (!datas || !datas[0]) return refresh(15)
+    const datas = await api();
+    if (!datas || !datas[0]) return refresh(15);
     if (latestDatas.length == 0) latestDatas = datas;
     if (compareObjects(latestDatas[0], datas[0])) return refresh(15);
     latestDatas = [datas[0], ...latestDatas.slice(0, 19)];
