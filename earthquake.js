@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const api = require('./api');
 const { default: axios } = require('axios');
-let latestData = []
+let latestDatas = []
 
 /**
  * This function allows you to get the latest earthquakes.
@@ -21,20 +21,22 @@ async function quake(timeout) {
     const refresh = async (x) => setTimeout(async () => await quake(x), timeout * 1000);
     const datas = await api()
 
-    if (!datas || !datas[0]) return refresh(30)
-    if (latestData.length == 0) latestData = datas.map(m => m.date);
-    if (latestData.includes(datas[0]?.date)) return refresh(30);
+    if (!datas || !datas[0]) return refresh(5)
+    if (latestDatas.length == 0) latestDatas = datas;
 
-    latestData = [datas[0]?.date, ...latestData];
+    if (compareObjects(latestDatas[0], datas[0])) return refresh(5);
+
+    console.log(latestDatas.length)
+    latestDatas = [datas[0], ...latestDatas.slice(0, 19)];
+    console.log(latestDatas.length)
 
     module.exports.earthquake.emit('quake', datas[0]);
-    latestData = [];
-    return refresh(30);
+    return refresh(5);
 }
 
 setTimeout(async () => {
     await moduleVersionControl();
-    await quake(30);
+    await quake(0);
 }, 1000);
 
 async function moduleVersionControl() {
@@ -46,4 +48,12 @@ async function moduleVersionControl() {
         console.log(new Date(), `(${package.name}) New version available! (${latest})`);
         console.log(new Date(), `(${package.name}) Please update your package with "npm i ${package.name}@latest"`);
     }
+}
+
+//obje benzerlik testi kodu
+function compareObjects(objectX, objectY) {
+    const datasX = Object.keys(objectX), datasY = Object.keys(objectY);
+    if (datasX.length !== datasY.length) return false;
+    for (const data of datasX) if (objectX[data] !== objectY[data]) return false;
+    return true;
 }
