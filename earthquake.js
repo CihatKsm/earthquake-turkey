@@ -36,7 +36,8 @@ setTimeout(async () => {
 async function moduleVersionControl() {
     const package = require('./package.json');
     const requestUrl = `http://registry.npmjs.org/${package.name}`;
-    const { data } = await axios.get(requestUrl).catch((e) => ({ data: null }));
+    const { data } = await axios.get(requestUrl).catch((e) => ({ data: null })) || { data: null };
+    if (!data) return;
     const latest = data['dist-tags'].latest;
     if (package.version !== latest) {
         console.log(new Date(), `(${package.name}) New version available! (${latest})`);
