@@ -39,15 +39,15 @@ module.exports = async (datas) => {
     
     const earthquakesZ = earthquakesY.slice(0, Number(controlled))
         .map(m => ({
-            date: m[0] + ' ' + m[1], depth: String(Number(m[4])), latitude: m[2], longitude: m[3],
+            date: m[0].split('.').reverse().join('.') + ' ' + m[1], depth: String(Number(m[4])), latitude: m[2], longitude: m[3],
             ml: [m[5], m[6], m[7]].filter(f => f !== '-.-').sort((a, b) => Number(b) - Number(a))[0]
         }));
 
     for (let earthquake of earthquakesZ.filter(f => Number(f.ml) >= Number(minimum))) {
         const { date, latitude, longitude, depth, ml } = earthquake;
-        const fixedDate = new Date(date.replaceAll('.', '-')).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' });
+        const id = Math.floor(Number(latitude) + Number(new Date(date.replaceAll('.', '-'))) + Number(longitude));
         const { coordinate, place, image, location } = await getPlace(latitude, longitude);
-        earthquakes.push({ date: fixedDate, latitude, longitude, depth, ml, place, coordinate, image, location });
+        earthquakes.push({ id, date, latitude, longitude, depth, ml, place, coordinate, image, location });
     }
 
     return earthquakes.slice(0, Number(count))
