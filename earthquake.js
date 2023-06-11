@@ -22,7 +22,6 @@ module.exports.earthquake = new EventEmitter();
     const refresh = async (x) => setTimeout(async () => await quake(x), timeout * 1000);
     const datas = await api();
     if (!datas || !datas[0]?.id) return refresh(15);
-    console.log(latestDatas.includes(datas[0].id))
     if (latestDatas.length == 0) latestDatas = datas.map(m => m.id);
     if (latestDatas.includes(datas[0].id)) return refresh(15);
     latestDatas = [datas[0].id, ...latestDatas.slice(0, 19)];
