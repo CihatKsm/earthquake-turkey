@@ -20,7 +20,7 @@ module.exports.earthquake = new EventEmitter();
 
 (async function quake(timeout) {
     const refresh = async (x) => setTimeout(async () => await quake(x), timeout * 1000);
-    const datas = await api();
+    const datas = await api({ api: 'KRDAE' });
     if (!datas || !datas[0]?.id) return refresh(15);
     if (latestDatas.length == 0) latestDatas = datas.map(m => m.id);
     if (latestDatas.includes(datas[0].id)) return refresh(15);

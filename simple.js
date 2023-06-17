@@ -7,8 +7,11 @@ earthquake.on('quake', (info) => {
     console.log(date(), info)
 })
 
-earthquakes({ minimum: 3.5, count: 1, controlled: 20 }).then((quakes) => {
-    console.log(date(), 'Here are the past 3 earthquakes:', quakes)
+const startTime = Date.now();
+earthquakes({ minimum: 2, count: 20 }).then((quakes) => {
+    const endTime = Date.now();
+    console.log(date(), `It took ${endTime - startTime}ms to get the earthquake information.`)
+    console.log(date(), quakes.length, quakes[0])
 })
 
 // setTimeout(async () => {
