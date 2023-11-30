@@ -25,7 +25,6 @@ earthquake.on('quake', object => {
     "depth": "10.8",
     "ml": "1.5",
     "place": "Hasanbaba, Hasanbaba Cd. 74, 77300 Çınarcık/Yalova",
-    "coordinate": "40°37'59.5\"N 29°07'44.4\"E",
     "image": "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
     "location": "https://www.google.com.tr/maps/place/40.6332,29.1290"
 }
